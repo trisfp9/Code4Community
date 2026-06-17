@@ -16,7 +16,7 @@ const team = [
   { name: 'Tristan Park', role: 'Mentor' },
   { name: 'Kate Wong', role: 'Mentor' },
   { name: 'Chloe Gwenneth Hia', role: 'Mentor' },
-  { name: 'Richarg Chang', role: 'Mentor' },
+  { name: 'Richard Chang', role: 'Mentor' },
   { name: 'Juwon Shin', role: 'Mentor' },
 ];
 
