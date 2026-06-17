@@ -20,7 +20,7 @@ export default function Footer() {
           <div>
             <h3>Quick Links</h3>
             <ul className="footer-links">
-              <li><Link href="/workshops">Workshops</Link></li>
+              {/* <li><Link href="/workshops">Workshops</Link></li> */}
               <li><Link href="/program">Our Program</Link></li>
               <li><Link href="/impact">Impact</Link></li>
               <li><Link href="/team">Team</Link></li>
