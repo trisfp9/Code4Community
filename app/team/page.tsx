@@ -2,23 +2,10 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Sponsors from '@/components/Sponsors';
 import ScrollAnimations from '@/components/ScrollAnimations';
+import { getTeam } from '@/lib/content/queries';
 
 export const metadata = { title: 'Our Team - Code 4 Community' };
-
-const team = [
-  { name: 'Ryan Wong', role: 'President' },
-  { name: 'Trevyn Theodore Tjandra', role: 'Vice-President' },
-  { name: 'Ken Adhisya Winarta', role: 'Media Manager' },
-  { name: 'Kent Djajaria', role: 'Mentor' },
-  { name: 'Audric Tsai', role: 'Mentor' },
-  { name: 'Michelle Wang', role: 'Mentor' },
-  { name: 'Janice Vivien Lau', role: 'Mentor' },
-  { name: 'Tristan Park', role: 'Mentor' },
-  { name: 'Kate Wong', role: 'Mentor' },
-  { name: 'Chloe Gwenneth Hia', role: 'Mentor' },
-  { name: 'Richard Chang', role: 'Mentor' },
-  { name: 'Juwon Shin', role: 'Mentor' },
-];
+export const revalidate = 30;
 
 const InstagramIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -32,7 +19,8 @@ const LinkedInIcon = () => (
   </svg>
 );
 
-export default function TeamPage() {
+export default async function TeamPage() {
+  const team = await getTeam();
   return (
     <>
       <Navbar />
@@ -50,13 +38,14 @@ export default function TeamPage() {
         <section className="container" style={{ padding: '4rem 1rem' }}>
           <div className="team-grid">
             {team.map((member, i) => (
-              <div key={member.name} className={`team-member scale-in stagger-${(i % 4) + 1}`}>
+              <div key={member.id} className={`team-member scale-in stagger-${(i % 4) + 1}`}>
                 <div className="team-member-image">
-                  <img src="/images/blank-pfp.jpg" alt={member.name} />
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={member.photo_url || '/images/blank-pfp.jpg'} alt={member.name} />
                   <div className="team-member-overlay">
                     <div className="team-social">
-                      <a href="#"><InstagramIcon /></a>
-                      <a href="#"><LinkedInIcon /></a>
+                      <a href={member.instagram_url || '#'}><InstagramIcon /></a>
+                      <a href={member.linkedin_url || '#'}><LinkedInIcon /></a>
                     </div>
                   </div>
                 </div>

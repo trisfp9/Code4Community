@@ -2,10 +2,14 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Sponsors from '@/components/Sponsors';
 import ScrollAnimations from '@/components/ScrollAnimations';
+import Icon from '@/components/Icon';
+import { getWorkshops } from '@/lib/content/queries';
 
 export const metadata = { title: 'Workshops - Code 4 Community' };
+export const revalidate = 30;
 
-export default function WorkshopsPage() {
+export default async function WorkshopsPage() {
+  const workshops = await getWorkshops();
   return (
     <>
       <Navbar />
@@ -22,44 +26,36 @@ export default function WorkshopsPage() {
 
         <section style={{ maxWidth: '72rem', margin: '0 auto', padding: '4rem 1rem' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
-            <div className="workshop-card fade-in">
-              <div className="workshop-image">
-                <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&q=80" alt="Python Programming" />
-                <span className="workshop-badge">Beginner</span>
-              </div>
-              <div className="workshop-content">
-                <div className="workshop-tags">
-                  <span className="workshop-tag">Python</span>
-                  <span className="workshop-tag">Coding</span>
-                  <span className="workshop-tag">Game Dev</span>
+            {workshops.map((w) => (
+              <div className="workshop-card fade-in" key={w.id}>
+                <div className="workshop-image">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={w.image_url || ''} alt={w.title} />
+                  {w.badge && <span className="workshop-badge">{w.badge}</span>}
                 </div>
-                <h3>Intro to Python Programming</h3>
-                <p>A perfect starting point for coding. Learn variables, loops, and basic logic by building a text-based adventure game.</p>
-                <div className="workshop-details">
-                  <div className="workshop-detail">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>
-                    October 15, 2025
+                <div className="workshop-content">
+                  <div className="workshop-tags">
+                    {w.tags.map((t) => <span className="workshop-tag" key={t}>{t}</span>)}
                   </div>
-                  <div className="workshop-detail">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                    10:00 AM - 2:00 PM PST
+                  <h3>{w.title}</h3>
+                  <p>{w.description}</p>
+                  <div className="workshop-details">
+                    {w.date && <div className="workshop-detail"><Icon name="calendar" size={16} />{w.date}</div>}
+                    {w.time && <div className="workshop-detail"><Icon name="clock" size={16} />{w.time}</div>}
+                    {w.location && <div className="workshop-detail"><Icon name="globe" size={16} />{w.location}</div>}
                   </div>
-                  <div className="workshop-detail">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-                    Online (Zoom)
+                  <div className="workshop-footer">
+                    <div className="workshop-attendees">
+                      <div className="workshop-attendee"></div>
+                      <div className="workshop-attendee"></div>
+                      <div className="workshop-attendee"></div>
+                      {w.attendee_count && <div className="workshop-attendee-count">{w.attendee_count}</div>}
+                    </div>
+                    <a href={w.register_url || '#'} className="btn btn-primary">Register Now</a>
                   </div>
-                </div>
-                <div className="workshop-footer">
-                  <div className="workshop-attendees">
-                    <div className="workshop-attendee"></div>
-                    <div className="workshop-attendee"></div>
-                    <div className="workshop-attendee"></div>
-                    <div className="workshop-attendee-count">+20</div>
-                  </div>
-                  <a href="#" className="btn btn-primary">Register Now</a>
                 </div>
               </div>
-            </div>
+            ))}
           </div>
         </section>
 
